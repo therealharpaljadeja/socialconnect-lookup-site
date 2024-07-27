@@ -25,9 +25,9 @@ export const useSocialConnect = () => {
     if (process.env.NEXT_PUBLIC_SOCIAL_CONNECT_PROVIDER === "TWITTER") {
       return IdentifierPrefix.TWITTER;
     } else if (process.env.NEXT_PUBLIC_SOCIAL_CONNECT_PROVIDER === "GITHUB") {
-      return IdentifierPrefix.TWITTER;
+      return IdentifierPrefix.GITHUB;
     }
-    return IdentifierPrefix.TWITTER;
+    return IdentifierPrefix.PHONE_NUMBER;
   };
 
   /**
@@ -52,9 +52,8 @@ export const useSocialConnect = () => {
       );
 
       let lookupResponse: LookupResponse = await response.json();
-      if (lookupResponse.accounts.length > 0) {
-        return lookupResponse.accounts[0];
-      }
+
+      return lookupResponse;
     }
   };
 

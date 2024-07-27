@@ -9,7 +9,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 // Define the response type for the lookup function
 export type LookupResponse = {
   accounts: string[]; // Array of account addresses
-  obfuscatedId: string; // Obfuscated identifier
+  obfuscatedId: string; // Obfuscated identifier,
+  countsPerIssuer: string[];
+  signers: string[];
+  issuers: string[];
 };
 
 // Define the default export function 'lookup' for handling API requests
@@ -27,6 +30,13 @@ export default async function lookup(
       );
 
       // Create a new instance of the SocialConnectIssuer
+      // const issuer = new SocialConnectIssuer(wallet, {
+      //   authenticationMethod: AuthenticationMethod.ENCRYPTION_KEY,
+      //   // Use the recommended authentication method to save on ODIS quota
+      //   // For steps to set up DEK, refer to the provided GitHub link - https://github.com/celo-org/social-connect/blob/main/docs/key-setup.md
+      //   rawKey: process.env.DEK_PRIVATE_KEY as string,
+      // });
+
       const issuer = new SocialConnectIssuer(wallet, {
         authenticationMethod: AuthenticationMethod.ENCRYPTION_KEY,
         // Use the recommended authentication method to save on ODIS quota
@@ -41,7 +51,11 @@ export default async function lookup(
       // Define the issuer addresses under which to perform the lookup
       // In this example, we are using our own issuer's address
       // However, SocialConnect allows looking up under other issuers by providing their addresses
-      let issuerAddresses = [wallet.address];
+      let issuerAddresses = [
+        "0x7888612486844Bb9BE598668081c59A9f7367FBc", // MiniPay
+        "0x388612590F8cC6577F19c9b61811475Aa432CB44", // Libera
+        "0x6549aF2688e07907C1b821cA44d6d65872737f05", // Kaala
+      ];
 
       // Perform the lookup using the issuer instance
       let lookupResponse: LookupResponse = await issuer.lookup(

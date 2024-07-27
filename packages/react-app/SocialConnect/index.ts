@@ -12,6 +12,8 @@ import {
   SERVICE_CONTEXT,
   STABLE_TOKEN_ADDRESS,
   STABLE_TOKEN_CONTRACT,
+  ACCOUNTS_CONTRACT,
+  ACCOUNTS_PROXY_ADDRESS,
 } from "./utils";
 
 // Define constants
@@ -63,6 +65,9 @@ export class SocialConnectIssuer {
         this.authSigner,
         this.serviceContext
       );
+
+    console.log(`Obfuscated Identifier: ${obfuscatedIdentifier}`);
+
     return obfuscatedIdentifier;
   }
 
@@ -155,19 +160,41 @@ export class SocialConnectIssuer {
     identifierType: IdentifierPrefix,
     issuerAddresses: string[]
   ) {
-    const obfuscatedId = await this.getObfuscatedId(
+    const obfuscatedId = await this.getObfuscatedIdWithQuotaRetry(
       plaintextId,
       identifierType
     );
+
     const attestations =
       await this.federatedAttestationsContract.lookupAttestations(
-        await this.getObfuscatedIdWithQuotaRetry(plaintextId, identifierType),
+        obfuscatedId,
         issuerAddresses
       );
 
+    const countsPerIssuer = attestations.countsPerIssuer.map((count) =>
+      count.toString()
+    );
+
+    const accounts = new Contract(
+      ACCOUNTS_PROXY_ADDRESS,
+      ACCOUNTS_CONTRACT.abi,
+      this.wallet
+    );
+
+    let issuers = [];
+
+    for await (let signer of attestations.signers) {
+      issuers.push(await accounts.attestationSignerToAccount(signer));
+    }
+
+    console.log("Issuers: ", issuers);
+
     return {
+      countsPerIssuer: countsPerIssuer as string[],
+      signers: attestations.signers as string[],
       accounts: attestations.accounts as string[],
       obfuscatedId,
+      issuers,
     };
   }
 }

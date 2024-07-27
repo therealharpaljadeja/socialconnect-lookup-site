@@ -22,6 +22,7 @@
     "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18",
+    "react-phone-number-input": "^3.4.4",
     "source-map-support": "^0.5.21",
     "viem": "^2.10.5",
     "wagmi": "^2.8.7"
