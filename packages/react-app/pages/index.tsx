@@ -40,8 +40,6 @@ export default function Home() {
             }
           }
 
-          console.log(lookupResultsProcessed);
-
           setLookupResults(lookupResultsProcessed);
         } else {
           setLookupResults([]);

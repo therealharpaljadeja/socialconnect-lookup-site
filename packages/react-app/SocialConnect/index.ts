@@ -66,8 +66,6 @@ export class SocialConnectIssuer {
         this.serviceContext
       );
 
-    console.log(`Obfuscated Identifier: ${obfuscatedIdentifier}`);
-
     return obfuscatedIdentifier;
   }
 
@@ -186,8 +184,6 @@ export class SocialConnectIssuer {
     for await (let signer of attestations.signers) {
       issuers.push(await accounts.attestationSignerToAccount(signer));
     }
-
-    console.log("Issuers: ", issuers);
 
     return {
       countsPerIssuer: countsPerIssuer as string[],
