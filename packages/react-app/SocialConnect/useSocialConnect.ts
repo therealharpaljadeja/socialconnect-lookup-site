@@ -40,21 +40,19 @@ export const useSocialConnect = () => {
    * @returns The first account in the response, or undefined if there is none.
    */
   const lookupAddress = async (identifier: string) => {
-    if (walletClient) {
-      let response: Response = await fetch(
-        `/api/socialconnect/lookup?${new URLSearchParams({
-          handle: identifier,
-          identifierType: getIdentifierPrefix(),
-        })}`,
-        {
-          method: "GET",
-        }
-      );
+    let response: Response = await fetch(
+      `/api/socialconnect/lookup?${new URLSearchParams({
+        handle: identifier,
+        identifierType: getIdentifierPrefix(),
+      })}`,
+      {
+        method: "GET",
+      }
+    );
 
-      let lookupResponse: LookupResponse = await response.json();
+    let lookupResponse: LookupResponse = await response.json();
 
-      return lookupResponse;
-    }
+    return lookupResponse;
   };
 
   /**
@@ -67,31 +65,29 @@ export const useSocialConnect = () => {
    * @returns True if the registration is successful, false otherwise.
    */
   const register = async (identifier: string) => {
-    if (walletClient) {
-      try {
-        setLoading(true);
-        let response = await fetch("/api/socialconnect/register", {
-          method: "POST",
-          body: JSON.stringify({
-            account: walletClient?.account.address,
-            identifier: identifier,
-            identifierType: getIdentifierPrefix(),
-          }),
-        });
+    try {
+      setLoading(true);
+      let response = await fetch("/api/socialconnect/register", {
+        method: "POST",
+        body: JSON.stringify({
+          account: walletClient?.account.address,
+          identifier: identifier,
+          identifierType: getIdentifierPrefix(),
+        }),
+      });
 
-        let registerResponse = await response.json();
+      let registerResponse = await response.json();
 
-        if (registerResponse.error) {
-          console.error(registerResponse.error);
-          return false;
-        }
-        return true;
-      } catch (error: any) {
-        console.error(error.message);
+      if (registerResponse.error) {
+        console.error(registerResponse.error);
         return false;
-      } finally {
-        setLoading(false);
       }
+      return true;
+    } catch (error: any) {
+      console.error(error.message);
+      return false;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,24 +100,22 @@ export const useSocialConnect = () => {
    * @param identifier The identifier to revoke.
    */
   const revoke = async (identifier: string) => {
-    if (walletClient) {
-      try {
-        let response = await fetch("/api/socialconnect/revoke", {
-          method: "POST",
-          body: JSON.stringify({
-            account: walletClient?.account.address,
-            identifier: identifier,
-            identifierType: getIdentifierPrefix(),
-          }),
-        });
+    try {
+      let response = await fetch("/api/socialconnect/revoke", {
+        method: "POST",
+        body: JSON.stringify({
+          account: walletClient?.account.address,
+          identifier: identifier,
+          identifierType: getIdentifierPrefix(),
+        }),
+      });
 
-        let deregisterResponse = await response.json();
-        if (deregisterResponse.error) {
-          console.error(deregisterResponse.error);
-        }
-      } catch (error: any) {
-        console.error(error.message);
+      let deregisterResponse = await response.json();
+      if (deregisterResponse.error) {
+        console.error(deregisterResponse.error);
       }
+    } catch (error: any) {
+      console.error(error.message);
     }
   };
 

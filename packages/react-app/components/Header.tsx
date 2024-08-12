@@ -1,10 +1,7 @@
 import { Disclosure } from "@headlessui/react";
 import Image from "next/image";
-import { useState } from "react";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <>
       <Disclosure as="nav" className="bg-prosperity border-b border-black">
