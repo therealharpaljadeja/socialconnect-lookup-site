@@ -5,7 +5,6 @@ import {
 import "@rainbow-me/rainbowkit/styles.css";
 import { injectedWallet } from "@rainbow-me/rainbowkit/wallets";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { celo, celoAlfajores } from "viem/chains";
 import { WagmiProvider, createConfig, http } from "wagmi";
@@ -43,11 +42,9 @@ function App({ Component, pageProps }: AppProps) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
-          <SessionProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </SessionProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
