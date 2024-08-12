@@ -19,6 +19,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   async function handleLookup() {
+    console.log(number);
     if (number) {
       setLoading(true);
       try {
