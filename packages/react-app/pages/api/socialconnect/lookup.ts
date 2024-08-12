@@ -71,6 +71,9 @@ export default async function lookup(
       return res.status(400).json({
         accounts: [],
         obfuscatedId: "",
+        countsPerIssuer: [],
+        signers: [],
+        issuers: [],
       });
   }
 }

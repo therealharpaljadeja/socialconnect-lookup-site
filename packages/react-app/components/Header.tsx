@@ -1,4 +1,3 @@
-import SocialConnectUI from "@/components/SocialConnectUI";
 import { Disclosure } from "@headlessui/react";
 import Image from "next/image";
 import { useState } from "react";
@@ -8,12 +7,6 @@ export default function Header() {
 
   return (
     <>
-      <SocialConnectUI
-        isOpen={isOpen}
-        closeModal={() => {
-          setIsOpen(false);
-        }}
-      />
       <Disclosure as="nav" className="bg-prosperity border-b border-black">
         {({ open }) => (
           <>

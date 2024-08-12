@@ -169,7 +169,7 @@ export class SocialConnectIssuer {
         issuerAddresses
       );
 
-    const countsPerIssuer = attestations.countsPerIssuer.map((count) =>
+    const countsPerIssuer = attestations.countsPerIssuer.map((count: any) =>
       count.toString()
     );
 

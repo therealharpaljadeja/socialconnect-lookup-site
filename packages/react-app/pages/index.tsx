@@ -1,9 +1,10 @@
 import { useSocialConnect } from "@/SocialConnect/useSocialConnect";
 import { useEffect, useState } from "react";
 import PhoneInput from "react-phone-number-input";
+import type { Value } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
-const KNOWN_ISSUERS = {
+const KNOWN_ISSUERS: { [k: string]: string } = {
   "0x7888612486844Bb9BE598668081c59A9f7367FBc": "MiniPay",
   "0x388612590F8cC6577F19c9b61811475Aa432CB44": "Libera",
   "0x6549aF2688e07907C1b821cA44d6d65872737f05": "Kaala",
@@ -11,8 +12,10 @@ const KNOWN_ISSUERS = {
 
 export default function Home() {
   const { lookupAddress } = useSocialConnect();
-  const [number, setNumber] = useState();
-  const [lookupResults, setLookupResults] = useState();
+  const [number, setNumber] = useState<Value | undefined>();
+  const [lookupResults, setLookupResults] = useState<
+    undefined | { [k: string]: string[] }
+  >();
   const [loading, setLoading] = useState(false);
 
   async function handleLookup() {
@@ -25,7 +28,7 @@ export default function Home() {
           lookupResults.accounts &&
           lookupResults.accounts.length
         ) {
-          const lookupResultsProcessed = {};
+          const lookupResultsProcessed: { [k: string]: string[] } = {};
 
           for (let i = 0; i < lookupResults.accounts.length; i++) {
             if (lookupResultsProcessed[lookupResults.issuers[i]]) {
@@ -42,7 +45,7 @@ export default function Home() {
 
           setLookupResults(lookupResultsProcessed);
         } else {
-          setLookupResults([]);
+          setLookupResults({});
         }
       } catch (error) {
         console.log(error);
